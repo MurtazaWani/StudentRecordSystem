@@ -11,5 +11,8 @@ namespace StudentRecordSystem.Application.Abstractions.IRepositories
     {
         public Task<IEnumerable<Student>> GetStudents();
         public Task<int> AddStudent(Student student);
+        public Task<Student> UpdateStudent(Student student);
+        public Task<int> DeleteStudent(Guid id);
+        public Task<Student> GetStudentById(Guid id);
     }
 }

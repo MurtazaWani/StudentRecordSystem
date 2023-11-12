@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StudentRecordSystem.Domain.Entities;
 public  class Student : BaseModel
 {
-    public string StudentName { get; set; }
+    public string StudentName { get; set; } = string.Empty;
 
-    public string Email { get; set; }
+    public string Email { get; set; } = string.Empty;
 
-    public int RollNo { get; set; }
+    public int RollNo { get; set; } = 0;
 
     public Guid CourseId { get; set; }
 

@@ -29,7 +29,6 @@ namespace StudentRecordSystem.Application.Services
 
         public async Task<int> AddStudent(StudentRequest studentRequest)
         {
-            //var res = await courseRepository.GetCourseById(studentRequest.CourseId);
             Student student = new Student
             {
                 Id = Guid.NewGuid(),
@@ -41,5 +40,39 @@ namespace StudentRecordSystem.Application.Services
             return await repository.AddStudent(student);
         }
 
+        public Task<StudentResponse> GetStudentById(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<StudentResponse> UpdateStudent(UpdateStudentRequest updateStudentRequest)
+        {
+            Student student = new Student
+            {
+                Id = updateStudentRequest.Id,
+                StudentName = updateStudentRequest.Name,
+                RollNo = updateStudentRequest.RollNo,
+                Email = updateStudentRequest.Email,
+                CourseId = updateStudentRequest.CourseId,
+            };
+            var res = await repository.UpdateStudent(student);
+            if (res != null)
+            {
+                return new StudentResponse
+                {
+                    Id = res.Id,
+                    Name = res.StudentName,
+                    RollNo = res.RollNo,
+                    Email = res.Email,
+                    CourseId = res.CourseId,
+                };
+            }
+            else return null;
+        }
+
+        public Task<StudentResponse> DeleteStudent(Guid id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

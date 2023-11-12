@@ -20,11 +20,11 @@ public class CoursesController : ControllerBase
     public async Task<ActionResult> GetAll()
     {
         var res = await services.GetCourses();
-        return res.IsNullOrEmpty<CourseResponse>() ? BadRequest(res) : Ok(res);
+        return res.IsNullOrEmpty() ? BadRequest(res) : Ok(res);
     }
-
+    
     [HttpPost]
-    public async Task<ActionResult> Add(CourseRequest course)
+    public async Task<ActionResult> Add([FromBody] CourseRequest course)
     {
         var res = await services.AddCourse(course);
         return res is not null ? Ok(res) : BadRequest(res);
@@ -38,13 +38,13 @@ public class CoursesController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<ActionResult> Update(UpdateCourseRequest updateCourseRequest)
+    public async Task<ActionResult> Update([FromBody] UpdateCourseRequest updateCourseRequest)
     {
         var res = await services.UpdateCourse(updateCourseRequest);
         return res is not null ? Ok(res) : BadRequest(res);
     }
 
-    [HttpDelete]
+    [HttpDelete("{id:guid}")]
     public async Task<ActionResult> Delete(Guid id)
     {
         var res = await services.DeleteCourse(id);

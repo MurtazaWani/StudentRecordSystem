@@ -24,5 +24,23 @@ namespace StudentRecordSystem.Persistence.Repositories
             var res = context.Set<Student>().AddAsync(student);
             return await context.SaveChangesAsync();
         }
+
+        public async Task<Student> UpdateStudent(Student student)
+        {
+            Task.Run(() => context.Set<Student>().Update(student));
+            var res = await context.SaveChangesAsync();
+            if (res > 0) return student;
+            else return null;
+        }
+
+        public Task<int> DeleteStudent(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Student> GetStudentById(Guid id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
