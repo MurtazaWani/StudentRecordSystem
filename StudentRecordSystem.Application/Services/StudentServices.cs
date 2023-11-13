@@ -27,7 +27,7 @@ namespace StudentRecordSystem.Application.Services
             });
         }
 
-        public async Task<int> AddStudent(StudentRequest studentRequest)
+        public async Task<StudentResponse> AddStudent(StudentRequest studentRequest)
         {
             Student student = new Student
             {
@@ -37,12 +37,36 @@ namespace StudentRecordSystem.Application.Services
                 Email = studentRequest.Email,
                 CourseId = studentRequest.CourseId,
             };
-            return await repository.AddStudent(student);
+            var res = await repository.AddStudent(student);
+            if (res > 0)
+            {
+                return new StudentResponse
+                {
+                    Id = student.Id,
+                    Name = student.StudentName,
+                    RollNo = student.RollNo,
+                    Email = studentRequest.Email,
+                    CourseId = studentRequest.CourseId,
+                };
+            }
+            else return null;
         }
 
-        public Task<StudentResponse> GetStudentById(Guid id)
+        public async Task<StudentResponse> GetStudentById(Guid id)
         {
-            throw new NotImplementedException();
+            var res = await repository.GetStudentById(id);
+            if (res != null)
+            {
+                return new StudentResponse
+                {
+                    Id = res.Id,
+                    Name = res.StudentName,
+                    RollNo = res.RollNo,
+                    Email = res.Email,
+                    CourseId = res.CourseId,
+                };
+            }
+            else return null;
         }
 
         public async Task<StudentResponse> UpdateStudent(UpdateStudentRequest updateStudentRequest)
@@ -70,9 +94,27 @@ namespace StudentRecordSystem.Application.Services
             else return null;
         }
 
-        public Task<StudentResponse> DeleteStudent(Guid id)
+        public async Task<int> DeleteStudent(Guid id)
+        {
+            return await repository.DeleteStudent(id);
+        }
+
+        public Task<IEnumerable<Student>> GetStudentByName(string name)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<StudentResponse>> FetchAllAsync(int pageNo, int pageSize)
+        {
+            var students = await repository.FetchAllAsync(pageNo, pageSize);
+            return students.Select(x => new StudentResponse
+            {
+                Id=x.Id,
+                Name = x.StudentName,
+                RollNo = x.RollNo,
+                Email = x.Email,
+                CourseId = x.CourseId,
+            });
         }
     }
 }

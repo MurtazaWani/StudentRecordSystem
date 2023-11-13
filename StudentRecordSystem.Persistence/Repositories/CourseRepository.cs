@@ -1,12 +1,8 @@
-﻿using StudentRecordSystem.Application.Abstractions.IRepositories;
-using StudentRecordSystem.Application.RRModels;
+﻿using Microsoft.EntityFrameworkCore;
+using StudentRecordSystem.Application.Abstractions.IRepositories;
 using StudentRecordSystem.Domain.Entities;
 using StudentRecordSystem.Persistence.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace StudentRecordSystem.Persistence.Repositories;
 
@@ -23,11 +19,10 @@ public class CourseRepository : ICourseRepository
         return await Task.Run(() => context.Set<Course>());
     }
 
-    public async Task<Course> AddCourse(Course course)
+    public async Task<int> AddCourse(Course course)
     {
         await context.Set<Course>().AddAsync(course);
-        var res = await context.SaveChangesAsync();
-        return res > 0 ? course : null;
+        return await context.SaveChangesAsync();
     }
 
     public async Task<Course> GetCourseById(Guid id)
@@ -37,7 +32,7 @@ public class CourseRepository : ICourseRepository
 
     public async Task<Course> UpdateCourse(Course course)
     {
-        Task.Run(() => context.Set<Course>().Update(course));
+        await Task.Run(() => context.Set<Course>().Update(course));
         var res = await context.SaveChangesAsync();
         return res > 0 ? course : null;
     }
@@ -51,5 +46,23 @@ public class CourseRepository : ICourseRepository
             return await context.SaveChangesAsync();
         }
         else return 0;
+    }
+
+    public async Task<IEnumerable<Course>> FindBy(Expression<Func<Course, bool>> expression)
+    {
+        return await Task.Run(() => context.Set<Course>().Where(expression));
+    }
+
+    public Task<bool> IsExists(Expression<Func<Course, bool>> expression)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<List<Course>> FetchAllAsync(int pageNo, int pageSize)
+    {
+        return await context.Set<Course>()
+            .Skip((pageNo - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
     }
 }

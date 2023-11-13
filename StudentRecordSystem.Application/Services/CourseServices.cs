@@ -37,13 +37,13 @@ public class CourseServices : ICourseServices
             Duration = courseRequest.Duration,
         };
         var res = await repository.AddCourse(course);
-        if (res is not null)
+        if (res > 0)
         {
             return new CourseResponse
             {
-                Id = res.Id,
-                CourseName = res.CourseName,
-                Duration = res.Duration,
+                Id = course.Id,
+                CourseName = course.CourseName,
+                Duration = course.Duration,
             };
         }
         else return null;
@@ -78,5 +78,27 @@ public class CourseServices : ICourseServices
     {
         var res = await repository.DeleteCourse(id);
         return res > 0 ? res : 0;        
+    }
+
+    public async Task<IEnumerable<CourseResponse>> GetCourseByName(string name)
+    {
+        var courses = await repository.FindBy(x => x.CourseName.StartsWith(name));
+        return courses.Select(x => new CourseResponse
+        {
+            Id = x.Id,
+            CourseName = x.CourseName,
+            Duration = x.Duration,
+        });
+    }
+
+    public async Task<IEnumerable<CourseResponse>> FetchAllAsync(int pageNo, int pageSize)
+    {
+        var courses = await repository.FetchAllAsync(pageNo, pageSize);
+        return courses.Select(x => new CourseResponse
+        {
+            Id = x.Id,
+            CourseName = x.CourseName,
+            Duration = x.Duration,
+        });
     }
 }

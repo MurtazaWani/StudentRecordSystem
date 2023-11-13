@@ -34,7 +34,7 @@ public class CoursesController : ControllerBase
     public async Task<ActionResult> GetById(Guid id)
     {
         var res = await services.GetCourseById(id);
-        return res is not null ? Ok(res) : BadRequest(res);
+        return res is not null ? Ok(res) : NotFound("not found");
     }
 
     [HttpPut]
@@ -49,5 +49,19 @@ public class CoursesController : ControllerBase
     {
         var res = await services.DeleteCourse(id);
         return res > 0 ? Ok(res) : BadRequest(res);
+    }
+
+    [HttpGet("{name:alpha}")]
+    public async Task<ActionResult> GetByName(string name)
+    {
+        var res = await services.GetCourseByName(name);
+        return res != null ? Ok(res) : BadRequest("does not exist");
+    }
+
+    [HttpGet("{pageNo:int}/{pageSize:int}")]
+    public async Task<ActionResult> FetchAll(int pageNo, int pageSize)
+    {
+        var res = await services.FetchAllAsync(pageNo, pageSize);
+        return res != null ? Ok(res) : BadRequest("there is some issue");
     }
 }

@@ -28,32 +28,34 @@ public class StudentsController : ControllerBase
     public async Task<ActionResult> Add([FromBody] StudentRequest studentRequest)
     {
         var res = await services.AddStudent(studentRequest);
-        return Ok(res);
+        return res != null ? Ok(res) : BadRequest("invalid student");
     }
 
     [HttpGet("id:guid")]
     public async Task<ActionResult> GetById(Guid id)
     {
-        return default;
+        var res = await services.GetStudentById(id);
+        return res != null ? Ok(res) : NotFound("student not found");
     }
 
     [HttpPut]
     public async Task<ActionResult> Update([FromBody] UpdateStudentRequest updateStudentRequest)
     {
         var res = await services.UpdateStudent(updateStudentRequest);
-        return Ok(res);
+        return res != null ? Ok(res) : BadRequest("invalid student");
     }
 
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult> Delete(Guid id)
     {
-        return null;
+        var res = await services.DeleteStudent(id);
+        return res > 0 ? Ok(res) : BadRequest("failed");
     }
 
     [HttpGet("{pageNo:int}/{pageSize:int}")]
     public async Task<ActionResult> FetchAll(int pageNo, int pageSize)
     {
-        
-        return default;
+        var res = await services.FetchAllAsync(pageNo, pageSize);
+        return res != null ? Ok(res) : BadRequest("there is some issue");
     }
 }
