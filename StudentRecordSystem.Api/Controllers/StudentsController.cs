@@ -58,4 +58,11 @@ public class StudentsController : ControllerBase
         var res = await services.FetchAllAsync(pageNo, pageSize);
         return res != null ? Ok(res) : BadRequest("there is some issue");
     }
+
+    [HttpGet("{name:alpha}")]
+    public async Task<ActionResult> GetStudentByName(string name)
+    {
+        var res = await services.GetStudentByName(name);
+        return res != null ? Ok(res) : NotFound("does not exist");
+    }
 }

@@ -10,7 +10,7 @@ namespace StudentRecordSystem.Application.Abstractions.IServices
         public Task<StudentResponse> GetStudentById(Guid id);
         public Task<StudentResponse> UpdateStudent(UpdateStudentRequest updateStudentRequest);
         public Task<int> DeleteStudent(Guid id);
-        Task<IEnumerable<Student>> GetStudentByName(string name);
+        Task<IEnumerable<StudentResponse>> GetStudentByName(string name);
         Task<IEnumerable<StudentResponse>> FetchAllAsync(int pageNo, int pageSize);
     }
 }

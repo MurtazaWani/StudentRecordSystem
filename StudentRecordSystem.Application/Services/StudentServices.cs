@@ -99,9 +99,17 @@ namespace StudentRecordSystem.Application.Services
             return await repository.DeleteStudent(id);
         }
 
-        public Task<IEnumerable<Student>> GetStudentByName(string name)
+        public async Task<IEnumerable<StudentResponse>> GetStudentByName(string name)
         {
-            throw new NotImplementedException();
+            var students = await repository.FindBy(x => x.Email.StartsWith(name));
+            return students.Select(x => new StudentResponse
+            {
+                Id = x.Id,
+                Name = x.StudentName,
+                RollNo = x.RollNo,
+                Email = x.Email,
+                CourseId = x.CourseId,
+            });
         }
 
         public async Task<IEnumerable<StudentResponse>> FetchAllAsync(int pageNo, int pageSize)

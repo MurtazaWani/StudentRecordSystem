@@ -51,9 +51,9 @@ namespace StudentRecordSystem.Persistence.Repositories
             return await context.Set<Student>().FindAsync(id);
         }
 
-        public Task<IEnumerable<Student>> FindBy(Expression<Func<Student, bool>> expression)
+        public async Task<IEnumerable<Student>> FindBy(Expression<Func<Student, bool>> expression)
         {
-            throw new NotImplementedException();
+            return await Task.Run(() => context.Set<Student>().Where(expression));
         }
 
         public Task<bool> IsExists(Expression<Func<Student, bool>> expression)
